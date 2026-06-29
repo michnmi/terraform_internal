@@ -47,6 +47,7 @@ pipeline {
             steps {
                 dir(env.TF_DIR) {
                     sh """
+                        TF_LOG=TRACE
                         terraform init \
                           -backend-config="path=${STATE_PATH}" \
                           -reconfigure
@@ -66,6 +67,7 @@ pipeline {
                     ]) {
                         withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
                             dir(env.TF_DIR) {
+                                sh 'TF_LOG=TRACE'
                                 sh 'terraform plan'
                             }
                         }
@@ -85,7 +87,7 @@ pipeline {
                     ]) {
                         withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
                             dir(env.TF_DIR) {
-                                sh 'terraform apply -auto-approve'
+                                sh 'TF_LOG=TRACE; terraform apply -auto-approve'
                             }
                         }
                     }
