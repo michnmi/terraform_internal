@@ -68,11 +68,11 @@ pipeline {
                         string(credentialsId: credId, variable: 'BASE_LIBVIRT_URI'),
                         sshUserPrivateKey(credentialsId: 'jenkins-automation-user', keyFileVariable: 'SSH_KEY_FILE')
                     ]) {
-                        withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
+                        withEnv(["TF_VAR_libvirt_uri=${env.BASE_LIBVIRT_URI}?keyfile=${env.SSH_KEY_FILE}"]) {
                             dir(env.TF_DIR) {
                                 sh """
-                                    echo "=== SSH key file path: ${SSH_KEY_FILE} ==="
-                                    ls -la ${SSH_KEY_FILE}
+                                    echo "=== SSH key file path: ${env.SSH_KEY_FILE} ==="
+                                    ls -la ${env.SSH_KEY_FILE}
                                     echo "=== TF_VAR_libvirt_uri is set: \$([ -n \"\$TF_VAR_libvirt_uri\" ] && echo yes || echo no) ==="
                                     terraform plan
                                 """
@@ -92,7 +92,7 @@ pipeline {
                         string(credentialsId: credId, variable: 'BASE_LIBVIRT_URI'),
                         sshUserPrivateKey(credentialsId: 'jenkins-automation-user', keyFileVariable: 'SSH_KEY_FILE')
                     ]) {
-                        withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
+                        withEnv(["TF_VAR_libvirt_uri=${env.BASE_LIBVIRT_URI}?keyfile=${env.SSH_KEY_FILE}"]) {
                             dir(env.TF_DIR) {
                                 sh 'terraform apply -auto-approve'
                             }
@@ -112,7 +112,7 @@ pipeline {
                         string(credentialsId: credId, variable: 'BASE_LIBVIRT_URI'),
                         sshUserPrivateKey(credentialsId: 'jenkins-automation-user', keyFileVariable: 'SSH_KEY_FILE')
                     ]) {
-                        withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
+                        withEnv(["TF_VAR_libvirt_uri=${env.BASE_LIBVIRT_URI}?keyfile=${env.SSH_KEY_FILE}"]) {
                             dir(env.TF_DIR) {
                                 sh 'terraform destroy -auto-approve'
                             }
