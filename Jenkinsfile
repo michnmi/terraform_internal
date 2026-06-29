@@ -29,6 +29,8 @@ pipeline {
         // TF_STATE_BASE_PATH must be set in Jenkins global environment variables (Manage Jenkins > System)
         STATE_PATH = "${env.TF_STATE_BASE_PATH}/${params.ENVIRONMENT}/${params.VM_NAME}.tfstate"
 
+        TF_LOG     = 'TRACE'
+
         // Terraform picks up TF_VAR_* automatically — no -var flags needed in commands
         TF_VAR_name              = "${params.VM_NAME}"
         TF_VAR_mac_address       = "${params.MAC_ADDRESS}"
@@ -47,7 +49,8 @@ pipeline {
             steps {
                 dir(env.TF_DIR) {
                     sh """
-                        TF_LOG=TRACE
+                        echo "=== STATE_PATH: ${STATE_PATH} ==="
+                        terraform version
                         terraform init \
                           -backend-config="path=${STATE_PATH}" \
                           -reconfigure
@@ -67,10 +70,12 @@ pipeline {
                     ]) {
                         withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
                             dir(env.TF_DIR) {
-                                sh 'echo $BASE_LIBVIRT_URI'
-                                sh 'echo $SSH_KEY_FILE'
-                                sh 'TF_LOG=TRACE'
-                                sh 'terraform plan'
+                                sh """
+                                    echo "=== SSH key file path: ${SSH_KEY_FILE} ==="
+                                    ls -la ${SSH_KEY_FILE}
+                                    echo "=== TF_VAR_libvirt_uri is set: \$([ -n \"\$TF_VAR_libvirt_uri\" ] && echo yes || echo no) ==="
+                                    terraform plan
+                                """
                             }
                         }
                     }
@@ -89,7 +94,7 @@ pipeline {
                     ]) {
                         withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
                             dir(env.TF_DIR) {
-                                sh 'TF_LOG=TRACE; terraform apply -auto-approve'
+                                sh 'terraform apply -auto-approve'
                             }
                         }
                     }
