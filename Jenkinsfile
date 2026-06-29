@@ -25,7 +25,7 @@ pipeline {
     }
 
     environment {
-        TF_DIR   = 'hosts'
+        TF_DIR     = 'hosts'
         // TF_STATE_BASE_PATH must be set in Jenkins global environment variables (Manage Jenkins > System)
         STATE_PATH = "${env.TF_STATE_BASE_PATH}/${params.ENVIRONMENT}/${params.VM_NAME}.tfstate"
 
@@ -60,9 +60,14 @@ pipeline {
             steps {
                 script {
                     def credId = params.ENVIRONMENT == 'prod' ? 'prod-libvirt-uri' : 'test-libvirt-uri'
-                    withCredentials([string(credentialsId: credId, variable: 'TF_VAR_libvirt_uri')]) {
-                        dir(env.TF_DIR) {
-                            sh 'terraform plan'
+                    withCredentials([
+                        string(credentialsId: credId, variable: 'BASE_LIBVIRT_URI'),
+                        sshUserPrivateKey(credentialsId: 'jenkins-automation-user', keyFileVariable: 'SSH_KEY_FILE')
+                    ]) {
+                        withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
+                            dir(env.TF_DIR) {
+                                sh 'terraform plan'
+                            }
                         }
                     }
                 }
@@ -74,9 +79,14 @@ pipeline {
             steps {
                 script {
                     def credId = params.ENVIRONMENT == 'prod' ? 'prod-libvirt-uri' : 'test-libvirt-uri'
-                    withCredentials([string(credentialsId: credId, variable: 'TF_VAR_libvirt_uri')]) {
-                        dir(env.TF_DIR) {
-                            sh 'terraform apply -auto-approve'
+                    withCredentials([
+                        string(credentialsId: credId, variable: 'BASE_LIBVIRT_URI'),
+                        sshUserPrivateKey(credentialsId: 'jenkins-automation-user', keyFileVariable: 'SSH_KEY_FILE')
+                    ]) {
+                        withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
+                            dir(env.TF_DIR) {
+                                sh 'terraform apply -auto-approve'
+                            }
                         }
                     }
                 }
@@ -89,9 +99,14 @@ pipeline {
                 input message: "Destroy VM '${params.VM_NAME}' in ${params.ENVIRONMENT}? This cannot be undone."
                 script {
                     def credId = params.ENVIRONMENT == 'prod' ? 'prod-libvirt-uri' : 'test-libvirt-uri'
-                    withCredentials([string(credentialsId: credId, variable: 'TF_VAR_libvirt_uri')]) {
-                        dir(env.TF_DIR) {
-                            sh 'terraform destroy -auto-approve'
+                    withCredentials([
+                        string(credentialsId: credId, variable: 'BASE_LIBVIRT_URI'),
+                        sshUserPrivateKey(credentialsId: 'jenkins-automation-user', keyFileVariable: 'SSH_KEY_FILE')
+                    ]) {
+                        withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
+                            dir(env.TF_DIR) {
+                                sh 'terraform destroy -auto-approve'
+                            }
                         }
                     }
                 }
