@@ -29,7 +29,7 @@ pipeline {
         // TF_STATE_BASE_PATH must be set in Jenkins global environment variables (Manage Jenkins > System)
         STATE_PATH = "${env.TF_STATE_BASE_PATH}/${params.ENVIRONMENT}/${params.VM_NAME}.tfstate"
 
-        TF_LOG     = 'TRACE'
+        TF_LOG     = 'DEBUG'
 
         // Terraform picks up TF_VAR_* automatically — no -var flags needed in commands
         TF_VAR_name              = "${params.VM_NAME}"
