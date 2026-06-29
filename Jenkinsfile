@@ -67,7 +67,8 @@ pipeline {
                     ]) {
                         withEnv(["TF_VAR_libvirt_uri=${BASE_LIBVIRT_URI}?keyfile=${SSH_KEY_FILE}"]) {
                             dir(env.TF_DIR) {
-                                sh 'echo $TF_VAR_libvirt_uri'
+                                sh 'echo $BASE_LIBVIRT_URI'
+                                sh 'echo $SSH_KEY_FILE'
                                 sh 'TF_LOG=TRACE'
                                 sh 'terraform plan'
                             }
