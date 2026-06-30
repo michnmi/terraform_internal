@@ -108,7 +108,7 @@ pipeline {
         stage('Destroy') {
             when { expression { params.ACTION == 'destroy' } }
             steps {
-                input message: "Destroy VM '${params.VM_NAME}' in ${params.ENVIRONMENT}? This cannot be undone."
+               // input message: "Destroy VM '${params.VM_NAME}' in ${params.ENVIRONMENT}? This cannot be undone."
                 script {
                     def credId = params.ENVIRONMENT == 'prod' ? 'prod-libvirt-uri' : 'test-libvirt-uri'
                     withCredentials([
