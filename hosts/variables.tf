@@ -59,8 +59,3 @@ variable "macvtap_interface" {
   type    = string
   default = "enp0s25"
 }
-
-variable "network_name" {
-  type    = string
-  default = "default"
-}
