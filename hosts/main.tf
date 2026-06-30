@@ -26,5 +26,4 @@ module "vm" {
   disk_size_unit    = var.disk_size_unit
   mac_address       = var.mac_address
   macvtap_interface = var.macvtap_interface
-  network_name      = var.network_name
 }
