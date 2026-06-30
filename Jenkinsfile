@@ -24,7 +24,6 @@ pipeline {
         string(name: 'VCPU',              defaultValue: '2',       description: '[plan/apply] vCPU count')
         string(name: 'DISK_SIZE',         defaultValue: '20',      description: '[plan/apply] Disk size in GiB (must be >= base image virtual size)')
         string(name: 'MACVTAP_INTERFACE', defaultValue: 'enp0s25', description: '[plan/apply] Physical NIC for macvtap')
-        string(name: 'NETWORK_NAME',      defaultValue: 'default', description: '[plan/apply] Secondary libvirt network name')
     }
 
     environment {
@@ -44,7 +43,6 @@ pipeline {
         TF_VAR_vcpu              = "${params.VCPU}"
         TF_VAR_disk_size         = "${params.DISK_SIZE}"
         TF_VAR_macvtap_interface = "${params.MACVTAP_INTERFACE}"
-        TF_VAR_network_name      = "${params.NETWORK_NAME}"
     }
 
     stages {
