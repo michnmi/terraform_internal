@@ -70,14 +70,6 @@ resource "libvirt_domain" "this" {
             mode = "bridge"
           }
         }
-      },
-      {
-        model = { type = "virtio" }
-        source = {
-          network = {
-            network = var.network_name
-          }
-        }
       }
     ]
 
