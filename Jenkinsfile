@@ -12,16 +12,19 @@ pipeline {
             choices: ['test', 'prod'],
             description: 'Target environment'
         )
+        // --- Required for all actions ---
         string(name: 'VM_NAME',           description: 'VM name')
-        string(name: 'MAC_ADDRESS',       description: 'MAC address for macvtap interface (must be lowercase)')
         string(name: 'POOL',              description: 'Libvirt storage pool name')
-        string(name: 'POOL_TARGET_PATH',  description: 'Filesystem path where the pool stores volumes')
-        string(name: 'BASE_VOLUME_NAME',  description: 'Base qcow2 image filename in the pool')
-        string(name: 'MEMORY',            defaultValue: '1024',    description: 'RAM in MiB')
-        string(name: 'VCPU',              defaultValue: '2',       description: 'vCPU count')
-        string(name: 'DISK_SIZE',         defaultValue: '20',      description: 'Disk size in GiB (must be >= base image virtual size)')
-        string(name: 'MACVTAP_INTERFACE', defaultValue: 'enp0s25', description: 'Physical NIC for macvtap')
-        string(name: 'NETWORK_NAME',      defaultValue: 'default', description: 'Secondary libvirt network name')
+
+        // --- Required for plan/apply only (not needed for destroy) ---
+        string(name: 'MAC_ADDRESS',       description: '[plan/apply] MAC address for macvtap interface (must be lowercase)')
+        string(name: 'POOL_TARGET_PATH',  description: '[plan/apply] Filesystem path where the pool stores volumes')
+        string(name: 'BASE_VOLUME_NAME',  description: '[plan/apply] Base qcow2 image filename in the pool')
+        string(name: 'MEMORY',            defaultValue: '1024',    description: '[plan/apply] RAM in MiB')
+        string(name: 'VCPU',              defaultValue: '2',       description: '[plan/apply] vCPU count')
+        string(name: 'DISK_SIZE',         defaultValue: '20',      description: '[plan/apply] Disk size in GiB (must be >= base image virtual size)')
+        string(name: 'MACVTAP_INTERFACE', defaultValue: 'enp0s25', description: '[plan/apply] Physical NIC for macvtap')
+        string(name: 'NETWORK_NAME',      defaultValue: 'default', description: '[plan/apply] Secondary libvirt network name')
     }
 
     environment {
