@@ -25,6 +25,7 @@ pipeline {
         string(name: 'DISK_SIZE',         defaultValue: '20',      description: '[plan/apply] Disk size in GiB (must be >= base image virtual size)')
         string(name: 'MACVTAP_INTERFACE', defaultValue: 'enp0s25', description: '[plan/apply] Physical NIC for macvtap')
         string(name: 'NETWORK_NAME', description: '[plan/apply] Libvirt network name for secondary interface (e.g. default)')
+        string(name: 'DATA_DISK_DEVICE', description: '[plan/apply] Path to a pre-existing raw block device for a second disk (e.g. /dev/zvol/data_disk/<vm>-volume). Leave blank if the VM has no external data disk.')
     }
 
     environment {
@@ -45,6 +46,7 @@ pipeline {
         TF_VAR_disk_size         = "${params.DISK_SIZE}"
         TF_VAR_macvtap_interface = "${params.MACVTAP_INTERFACE}"
         TF_VAR_network_name      = "${params.NETWORK_NAME}"
+        TF_VAR_data_disk_device  = "${params.DATA_DISK_DEVICE}"
     }
 
     stages {
