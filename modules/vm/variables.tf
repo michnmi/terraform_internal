@@ -56,3 +56,9 @@ variable "macvtap_interface" {
   default     = "enp0s25"
   description = "Physical host NIC to attach macvtap to"
 }
+
+variable "network_name" {
+  type        = string
+  description = "Libvirt network name for the secondary interface (e.g. default)"
+  default     = "default"
+}
