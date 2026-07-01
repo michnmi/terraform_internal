@@ -62,3 +62,9 @@ variable "network_name" {
   description = "Libvirt network name for the secondary interface (e.g. default)"
   default     = "default"
 }
+
+variable "data_disk_device" {
+  type        = string
+  default     = ""
+  description = "Path to a pre-existing raw block device (e.g. a ZFS zvol under /dev/zvol/...) to attach as a second disk. Leave empty for VMs with no external data disk. Terraform does not create this device — it must already exist on the host."
+}

@@ -26,6 +26,47 @@ resource "libvirt_volume" "this" {
   }
 }
 
+locals {
+  disks = concat(
+    [
+      {
+        driver = {
+          name = "qemu"
+          type = "qcow2"
+        }
+        source = {
+          file = {
+            file = libvirt_volume.this.path
+          }
+        }
+        target = {
+          dev = "vda"
+          bus = "virtio"
+        }
+      }
+    ],
+    var.data_disk_device == "" ? [] : [
+      {
+        driver = {
+          name  = "qemu"
+          type  = "raw"
+          cache = "none"
+          io    = "native"
+        }
+        source = {
+          block = {
+            dev = var.data_disk_device
+          }
+        }
+        target = {
+          dev = "vdb"
+          bus = "virtio"
+        }
+      }
+    ]
+  )
+}
+
 resource "libvirt_domain" "this" {
   name        = var.name
   type        = "kvm"
@@ -42,23 +83,7 @@ resource "libvirt_domain" "this" {
   }
 
   devices = {
-    disks = [
-      {
-        driver = {
-          name = "qemu"
-          type = "qcow2"
-        }
-        source = {
-          file = {
-            file = libvirt_volume.this.path
-          }
-        }
-        target = {
-          dev = "vda"
-          bus = "virtio"
-        }
-      }
-    ]
+    disks = local.disks
 
     interfaces = [
       {

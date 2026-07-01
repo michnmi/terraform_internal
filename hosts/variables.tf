@@ -65,3 +65,9 @@ variable "network_name" {
   default     = "default"
   description = "Libvirt network name for secondary interface"
 }
+
+variable "data_disk_device" {
+  type        = string
+  default     = ""
+  description = "Path to a pre-existing raw block device (e.g. ZFS zvol) for a second disk. Leave empty for VMs with no external data disk."
+}
