@@ -62,5 +62,6 @@ variable "macvtap_interface" {
 
 variable "network_name" {
   type        = string
+  default     = "default"
   description = "Libvirt network name for secondary interface"
 }
