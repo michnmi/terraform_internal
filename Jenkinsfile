@@ -13,7 +13,7 @@ pipeline {
             description: 'Target environment'
         )
         // --- Required for all actions ---
-        string(name: 'VM_NAME',           description: 'VM name')
+        string(name: 'VM_NAME',           description: 'VM name to have')
         string(name: 'POOL',              description: 'Libvirt storage pool name')
 
         // --- Required for plan/apply only (not needed for destroy) ---
