@@ -30,8 +30,6 @@ pipeline {
 
     environment {
         TF_DIR     = 'hosts'
-        // TF_STATE_BASE_PATH must be set in Jenkins global environment variables (Manage Jenkins > System)
-        STATE_PATH = "${env.TF_STATE_BASE_PATH}/${params.ENVIRONMENT}/${params.VM_NAME}.tfstate"
 
         TF_LOG     = 'INFO'
 
@@ -52,14 +50,19 @@ pipeline {
     stages {
         stage('Init') {
             steps {
-                dir(env.TF_DIR) {
-                    sh """
-                        echo "=== STATE_PATH: ${STATE_PATH} ==="
-                        terraform version
-                        terraform init \
-                          -backend-config="path=${STATE_PATH}" \
-                          -reconfigure
-                    """
+                withCredentials([string(credentialsId: 'TF_STATE_BASE_PATH', variable: 'TF_STATE_BASE_PATH')]) {
+                    script {
+                        env.STATE_PATH = "${env.TF_STATE_BASE_PATH}/${params.ENVIRONMENT}/${params.VM_NAME}.tfstate"
+                    }
+                    dir(env.TF_DIR) {
+                        sh """
+                            echo "=== STATE_PATH: ${env.STATE_PATH} ==="
+                            terraform version
+                            terraform init \
+                              -backend-config="path=${env.STATE_PATH}" \
+                              -reconfigure
+                        """
+                    }
                 }
             }
         }
