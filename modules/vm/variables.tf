@@ -68,3 +68,9 @@ variable "data_disk_device" {
   default     = ""
   description = "Path to a pre-existing raw block device (e.g. a ZFS zvol under /dev/zvol/...) to attach as a second disk. Leave empty for VMs with no external data disk. Terraform does not create this device — it must already exist on the host."
 }
+
+variable "nested_virt" {
+  type        = bool
+  default     = false
+  description = "Expose host CPU virtualization features (vmx/svm) to the guest via cpu mode=host-passthrough. Required for VMs that themselves run KVM/QEMU (e.g. a Packer/QEMU build VM). Also requires nested virtualization enabled on the physical host's kvm_intel/kvm_amd module."
+}

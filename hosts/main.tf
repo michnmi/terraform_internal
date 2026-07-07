@@ -28,4 +28,5 @@ module "vm" {
   macvtap_interface = var.macvtap_interface
   network_name      = var.network_name
   data_disk_device  = var.data_disk_device
+  nested_virt       = var.nested_virt
 }

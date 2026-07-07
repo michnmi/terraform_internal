@@ -26,6 +26,7 @@ pipeline {
         string(name: 'MACVTAP_INTERFACE', defaultValue: 'enp0s25', description: '[plan/apply] Physical NIC for macvtap')
         string(name: 'NETWORK_NAME', description: '[plan/apply] Libvirt network name for secondary interface (e.g. default)')
         string(name: 'DATA_DISK_DEVICE', description: '[plan/apply] Path to a pre-existing raw block device for a second disk (e.g. /dev/zvol/data_disk/<vm>-volume). Leave blank if the VM has no external data disk.')
+        booleanParam(name: 'NESTED_VIRT', defaultValue: false, description: '[plan/apply] Expose host CPU virtualization features (vmx/svm) to the guest. Required for VMs that themselves run KVM/QEMU (e.g. a Packer/QEMU build VM). Also requires nested virtualization enabled on the physical host.')
     }
 
     environment {
@@ -45,6 +46,7 @@ pipeline {
         TF_VAR_macvtap_interface = "${params.MACVTAP_INTERFACE}"
         TF_VAR_network_name      = "${params.NETWORK_NAME}"
         TF_VAR_data_disk_device  = "${params.DATA_DISK_DEVICE}"
+        TF_VAR_nested_virt       = "${params.NESTED_VIRT}"
     }
 
     stages {

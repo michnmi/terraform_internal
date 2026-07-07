@@ -71,3 +71,9 @@ variable "data_disk_device" {
   default     = ""
   description = "Path to a pre-existing raw block device (e.g. ZFS zvol) for a second disk. Leave empty for VMs with no external data disk."
 }
+
+variable "nested_virt" {
+  type        = bool
+  default     = false
+  description = "Expose host CPU virtualization features (vmx/svm) to the guest. Required for VMs that themselves run KVM/QEMU (e.g. a Packer/QEMU build VM)."
+}

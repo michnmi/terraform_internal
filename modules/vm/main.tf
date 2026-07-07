@@ -82,6 +82,10 @@ resource "libvirt_domain" "this" {
     type_machine = "pc"
   }
 
+  cpu = var.nested_virt ? {
+    mode = "host-passthrough"
+  } : null
+
   devices = {
     disks = local.disks
 
