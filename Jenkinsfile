@@ -135,10 +135,16 @@ pipeline {
 
     post {
         failure {
-            echo "Terraform ${params.ACTION} failed for VM '${params.VM_NAME}' in ${params.ENVIRONMENT}"
+            slackSend(
+                color: "danger",
+                message: "Terraform ${params.ACTION} failed for VM '${params.VM_NAME}' in ${params.ENVIRONMENT}"
+            )
         }
         success {
-            echo "Terraform ${params.ACTION} completed for VM '${params.VM_NAME}' in ${params.ENVIRONMENT}"
+            slackSend(
+                color: "good",
+                message: "Terraform ${params.ACTION} completed for VM '${params.VM_NAME}' in ${params.ENVIRONMENT}"
+            )
         }
     }
 }
