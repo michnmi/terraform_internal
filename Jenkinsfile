@@ -137,7 +137,7 @@ pipeline {
         failure {
             slackSend(
                 color: "danger",
-                message: "Terraform ${params.ACTION} failed for VM '${params.VM_NAME}' in ${params.ENVIRONMENT}"
+                message: "Terraform ${params.ACTION} failed for VM '${params.VM_NAME}' in ${params.ENVIRONMENT} (${env.BUILD_URL}|${env.JOB_NAME} #${env.BUILD_NUMBER})"
             )
         }
     }
