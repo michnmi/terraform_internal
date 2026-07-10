@@ -140,11 +140,5 @@ pipeline {
                 message: "Terraform ${params.ACTION} failed for VM '${params.VM_NAME}' in ${params.ENVIRONMENT}"
             )
         }
-        success {
-            slackSend(
-                color: "good",
-                message: "Terraform ${params.ACTION} completed for VM '${params.VM_NAME}' in ${params.ENVIRONMENT}"
-            )
-        }
     }
 }
