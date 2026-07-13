@@ -27,6 +27,9 @@ resource "libvirt_volume" "this" {
 }
 
 locals {
+  # vda is the qcow2 boot disk; additional data disks take vdb, vdc, vdd, ...
+  data_disk_letters = ["b", "c", "d", "e", "f", "g", "h", "i"]
+
   disks = concat(
     [
       {
@@ -45,8 +48,8 @@ locals {
         }
       }
     ],
-    var.data_disk_device == "" ? [] : [
-      {
+    [
+      for index, device in var.data_disk_devices : {
         driver = {
           name  = "qemu"
           type  = "raw"
@@ -55,11 +58,11 @@ locals {
         }
         source = {
           block = {
-            dev = var.data_disk_device
+            dev = device
           }
         }
         target = {
-          dev = "vdb"
+          dev = "vd${local.data_disk_letters[index]}"
           bus = "virtio"
         }
       }
@@ -73,8 +76,8 @@ resource "libvirt_domain" "this" {
   memory      = var.memory
   memory_unit = "MiB"
   vcpu        = var.vcpu
-  autostart = var.autostart
-  running   = true
+  autostart   = var.autostart
+  running     = true
 
   os = {
     type         = "hvm"
