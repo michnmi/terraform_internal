@@ -25,7 +25,7 @@ pipeline {
         string(name: 'DISK_SIZE',         defaultValue: '20',      description: '[plan/apply] Disk size in GiB (must be >= base image virtual size)')
         string(name: 'MACVTAP_INTERFACE', defaultValue: 'enp0s25', description: '[plan/apply] Physical NIC for macvtap')
         string(name: 'NETWORK_NAME', description: '[plan/apply] Libvirt network name for secondary interface (e.g. default)')
-        string(name: 'DATA_DISK_DEVICE', description: '[plan/apply] Path to a pre-existing raw block device for a second disk (e.g. /dev/zvol/data_disk/<vm>-volume). Leave blank if the VM has no external data disk.')
+        string(name: 'DATA_DISK_DEVICES', defaultValue: '[]', description: '[plan/apply] Terraform list literal of pre-existing raw block devices for additional disks, e.g. ["/dev/zvol/data_disk/<vm>-vol1","/dev/zvol/data_disk/<vm>-vol2"]. Leave as [] if the VM has no external data disks.')
         booleanParam(name: 'NESTED_VIRT', defaultValue: false, description: '[plan/apply] Expose host CPU virtualization features (vmx/svm) to the guest. Required for VMs that themselves run KVM/QEMU (e.g. a Packer/QEMU build VM). Also requires nested virtualization enabled on the physical host.')
     }
 
@@ -45,7 +45,7 @@ pipeline {
         TF_VAR_disk_size         = "${params.DISK_SIZE}"
         TF_VAR_macvtap_interface = "${params.MACVTAP_INTERFACE}"
         TF_VAR_network_name      = "${params.NETWORK_NAME}"
-        TF_VAR_data_disk_device  = "${params.DATA_DISK_DEVICE}"
+        TF_VAR_data_disk_devices = "${params.DATA_DISK_DEVICES}"
         TF_VAR_nested_virt       = "${params.NESTED_VIRT}"
     }
 

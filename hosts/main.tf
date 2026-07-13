@@ -27,6 +27,6 @@ module "vm" {
   mac_address       = var.mac_address
   macvtap_interface = var.macvtap_interface
   network_name      = var.network_name
-  data_disk_device  = var.data_disk_device
+  data_disk_devices = var.data_disk_devices
   nested_virt       = var.nested_virt
 }

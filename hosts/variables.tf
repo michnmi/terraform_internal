@@ -66,10 +66,10 @@ variable "network_name" {
   description = "Libvirt network name for secondary interface"
 }
 
-variable "data_disk_device" {
-  type        = string
-  default     = ""
-  description = "Path to a pre-existing raw block device (e.g. ZFS zvol) for a second disk. Leave empty for VMs with no external data disk."
+variable "data_disk_devices" {
+  type        = list(string)
+  default     = []
+  description = "Paths to pre-existing raw block devices (e.g. ZFS zvols) for additional disks, one per entry. Leave empty for VMs with no external data disk."
 }
 
 variable "nested_virt" {

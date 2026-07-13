@@ -63,10 +63,10 @@ variable "network_name" {
   default     = "default"
 }
 
-variable "data_disk_device" {
-  type        = string
-  default     = ""
-  description = "Path to a pre-existing raw block device (e.g. a ZFS zvol under /dev/zvol/...) to attach as a second disk. Leave empty for VMs with no external data disk. Terraform does not create this device — it must already exist on the host."
+variable "data_disk_devices" {
+  type        = list(string)
+  default     = []
+  description = "Paths to pre-existing raw block devices (e.g. ZFS zvols under /dev/zvol/...) to attach as additional disks, one per entry. Leave empty for VMs with no external data disk. Terraform does not create these devices — they must already exist on the host. Attached in order as vdb, vdc, vdd, ... (max 8)."
 }
 
 variable "nested_virt" {
